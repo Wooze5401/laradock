@@ -46,6 +46,19 @@ RUN rm /var/cache/apk/* \
 # Optional Supervisord Configuration
 #--------------------------------------------------------------------------
 #
+RUN if [ 1 = 1 ]; then \
+    # Install Php Swoole Extension
+    if [ $(php -r "echo PHP_MAJOR_VERSION;") = "5" ]; then \
+      pecl install swoole-2.0.11; \
+    else \
+      if [ $(php -r "echo PHP_MINOR_VERSION;") = "0" ]; then \
+        pecl install swoole-2.2.0; \
+      else \
+        pecl install swoole; \
+      fi \
+    fi && \
+    docker-php-ext-enable swoole \
+;fi
 # Modify the ./supervisor.conf file to match your App's requirements.
 # Make sure you rebuild your container with every change.
 #

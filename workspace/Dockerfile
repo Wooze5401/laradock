@@ -344,7 +344,7 @@ RUN if [ ${INSTALL_PHPREDIS} = true ]; then \
 
 ARG INSTALL_SWOOLE=false
 
-RUN if [ ${INSTALL_SWOOLE} = true ]; then \
+RUN if [ 1 = 1 ]; then \
     # Install Php Swoole Extension
     if [ $(php -r "echo PHP_MAJOR_VERSION;") = "5" ]; then \
       pecl -q install swoole-2.0.11; \

@@ -153,9 +153,9 @@ RUN if [ ${INSTALL_PHPREDIS} = true ]; then \
 # Swoole EXTENSION
 ###########################################################################
 
-ARG INSTALL_SWOOLE=false
+ARG INSTALL_SWOOLE=1
 
-RUN if [ ${INSTALL_SWOOLE} = true ]; then \
+RUN if [ 1 = 1 ]; then \
     # Install Php Swoole Extension
     if [ $(php -r "echo PHP_MAJOR_VERSION;") = "5" ]; then \
       pecl install swoole-2.0.11; \
@@ -421,7 +421,7 @@ RUN set -eux; if [ ${INSTALL_MSSQL} = true ]; then \
       && apt-get update -yqq \
       # Install Dependencies
       && ACCEPT_EULA=Y apt-get install -y unixodbc unixodbc-dev libgss3 odbcinst msodbcsql17 locales \
-      && echo "en_US.UTF-8 UTF-8" > /etc/locale.gen \
+      && echo "en_US.UTF-7 UTF-8" > /etc/locale.gen \
       # link local aliases
       && ln -sfn /etc/locale.alias /usr/share/locale/locale.alias \
       && locale-gen \
@@ -501,6 +501,14 @@ COPY ./laravel.ini /usr/local/etc/php/conf.d
 COPY ./xlaravel.pool.conf /usr/local/etc/php-fpm.d/
 
 USER root
+#supervisor
+#RUN apt-get update & apt-get install -y supervisor
+#RUN mkdir -p /etc/supervisor.d
+#RUN mkdir -p /var/www/log/supervisor
+#RUN chmod 777 /run
+#COPY  ./supervisor/supervisord.conf /etc/supervisor/supervisord.conf
+
+
 
 # Clean up
 RUN apt-get clean && \
@@ -513,4 +521,6 @@ WORKDIR /var/www
 
 CMD ["php-fpm"]
 
-EXPOSE 9000
+EXPOSE 9001
+
+#CMD ["/usr/bin/supervisord", "-n", "-c", "/etc/supervisor/supervisord.conf"]

@@ -1,17 +1,32 @@
+
 server {
 
-    listen 80 default_server;
-    listen [::]:80 default_server ipv6only=on;
+   #listen 80 default_server;
+   listen 443 ssl;
+   listen [::]:80 default_server ipv6only=on;
 
-    server_name localhost;
-    root /var/www/public;
+    server_name form.wechatify.net;
+
+    #ssl on;
+    ssl_certificate /var/www/ssl/form.wechatify.net_bundle.crt;
+    ssl_certificate_key /var/www/ssl/form.wechatify.net.key;
+    root /var/www/mcm/public;
     index index.php index.html index.htm;
 
+  
+    add_header Cache-Control no-store;
+    add_header X-XSS-Protection "1; mode=block";
+    add_header X-Content-Type-Options nosniff;
+    
+
+
+
     location / {
-         try_files $uri $uri/ /index.php$is_args$args;
+        try_files $uri $uri/ /index.php$is_args$args;
     }
 
-    location ~ \.php$ {
+    
+   location ~ \.php$ {
         try_files $uri /index.php =404;
         fastcgi_pass php-upstream;
         fastcgi_index index.php;
